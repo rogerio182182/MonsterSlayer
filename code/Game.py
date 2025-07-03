@@ -19,7 +19,7 @@ class Game:
             level = Level(self.window, name=self)
 
             if menu_return == MENU_OPTION[0]:
-                level = Level(self.window, 'LEVEL' )
+                level.demo(self.window)
             elif menu_return == MENU_OPTION[1]:
                 level.sorry(self.window)
             elif menu_return == MENU_OPTION[2]:

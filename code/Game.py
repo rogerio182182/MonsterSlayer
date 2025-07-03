@@ -16,19 +16,20 @@ class Game:
         while True:
             menu = Menu(self.window)
             menu_return = menu.run()
+            level = Level(self.window, name=self)
 
             if menu_return == MENU_OPTION[0]:
                 level = Level(self.window, 'LEVEL' )
             elif menu_return == MENU_OPTION[1]:
-                level = Level.sorry(self, window=None)
+                level.sorry(self.window)
             elif menu_return == MENU_OPTION[2]:
-                pass
+                level.sorry(self.window)
             elif menu_return == MENU_OPTION[3]:
-                pass
+                level.sorry(self.window)
             elif menu_return == MENU_OPTION[4]:
                 pygame.quit()
                 quit()
-            pass
+
 
 
 

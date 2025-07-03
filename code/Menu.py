@@ -50,6 +50,7 @@ class Menu:
                     elif event.key == pygame.K_RETURN:
                         return MENU_OPTION[menu_option]
 
+
     def menu_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple):
         #  font = pygame.font.SysFont(None, size= text_size)
         font = pygame.font.Font('./asset/FontePetrock.ttf', size=text_size)

@@ -3,12 +3,14 @@ c_orange = 255, 140, 0
 c_gold = 255, 215, 0
 c_grey = 200, 200, 200
 c_white = 255, 255, 255
+c_blue = 70, 130, 180
 
 #M
 MENU_OPTION = ('jogar versão - DEMO',
                'jogar versão - COMPLETA',
                'ranking',
-               'configuraçoes')
+               'configuraçoes',
+               'exit')
 
 
 

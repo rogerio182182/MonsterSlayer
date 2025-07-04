@@ -5,13 +5,32 @@ import pygame
 
 class Entity(ABC):
 
-    def __init__(self, name: str, position: tuple):
+    def __init__(self, name: str, grid_x, grid_y, tile_size, images_d: dict):
         self.name = name
-        self.surf = pygame.image.load('./asset' + name + 'png')
-        self.rect = self.surf.get_rect(left=position[0], top=position[1])
-        self.speed = 0
+        self.grid_pos = (grid_x, grid_y)
+        self.tile_size = tile_size
+        self.direction = "down"
+        self.images = images_d
+        self.image = self.images[self.direction]
+        self.rect = self.image.get_rect(topleft=(grid_x * tile_size, grid_y * tile_size))
+
+    def move(self, dx, dy):
+        x, y = self.grid_pos
+        self.grid_pos = (x + dx, y + dy)
+
+        if dx > 0:
+            self.direction = "right"
+        elif dx < 0:
+            self.direction = "left"
+        elif dy > 0:
+            self.direction = "down"
+        elif dy < 0:
+            self.direction = "up"
 
 
-    @abstractmethod
-    def move(self, ):
-        pass
+        self.rect.topleft = (self.grid_pos[0] * self.tile_size, self.grid_pos[1] * self.tile_size)
+        self.image = self.images[self.direction]
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+

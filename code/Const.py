@@ -18,7 +18,22 @@ MENU_OPTION = ('jogar versão - DEMO',
                'configuraçoes',
                'exit')
 
-
+MONSTER_LIST = {
+    "slime": {
+        "grid_x": 3,
+        "grid_y": 5,
+        'hp': 20,
+        "speed": 1,
+        "images_key": "slime"
+    },
+    "goblin": {
+        "grid_x": 6,
+        "grid_y": 7,
+        'hp': 50,
+        "speed": 2,
+        "images_key": "goblin"
+    }
+}
 
 #W
 W_WIDTH = 1000

@@ -1,5 +1,12 @@
 import pygame
 
+from code.Const import c_white, W_HEIGHT
+from code.EntityFactory import Entityfactory
+from code.Monster import Monster
+
+from code.Player import Player
+
+
 class Level:
     def __init__(self, window, name):
         self.window = window
@@ -15,19 +22,38 @@ class Level:
     def demo(self, window):
         pygame.mixer_music.load('./asset/demoMusic.wav')
         pygame.mixer_music.play(-1)
+
+        Player.carregar_imagens()
+        player = Entityfactory.get_entity("Player")
+        Monster.carregar_imagens('slime')
+        Monster.carregar_imagens('goblin')
+        slime = Entityfactory.get_entity('slime')
+        goblin = Entityfactory.get_entity('goblin')
         surf = pygame.image.load('./asset/mapaDemo.jpg').convert_alpha()
         surf = pygame.transform.scale(surf, window.get_size())
         rect = surf.get_rect()
-        window.blit(surf, rect)
-        grid = self.map_space()
+        self.map_space()
+        clock = pygame.time.Clock()
 
-        pygame.display.flip()
 
         while True:
+           clock.tick(60)
            for event in pygame.event.get():
                if event.type == pygame.KEYDOWN:
                    if event.key == pygame.K_ESCAPE:
                        return
+                   player.handle_event(event)
+
+           window.blit(surf, rect)
+           window.blit(player.image, player.rect.topleft)
+           slime.set_player_position(player.grid_pos)
+           slime.move_towards_player()
+           window.blit(slime.image, slime.rect.topleft)
+
+           goblin.set_player_position(player.grid_pos)
+           goblin.move_towards_player()
+           window.blit(goblin.image, goblin.rect.topleft)
+           pygame.display.flip()
 
     def sorry(self, window):
         surf = pygame.image.load('./asset/Desculpas.png')

@@ -4,7 +4,7 @@ import os
 from code.Entity import Entity
 
 class Monster(Entity):
-    def __init__(self, name, grid_x, grid_y, tile_size, images_d, hp=10, speed=1):
+    def __init__(self, name, grid_x, grid_y, tile_size,  images_d, hp=10, speed=1):
         super().__init__(name, grid_x, grid_y, tile_size, images_d)
         self.hp = hp
         self.player_pos = None
@@ -42,6 +42,15 @@ class Monster(Entity):
             move_y = 1 if dy > 0 else -1 if dy < 0 else 0
 
         self.move(move_x, move_y)
+
+    @staticmethod
+    def get_spawn_points_borda(map_width=20, map_height=12):
+        pontos = []
+        pontos += [(x, 0) for x in range(map_width)]
+        pontos += [(x, map_height - 1) for x in range(map_width)]
+        pontos += [(0, y) for y in range(1, map_height - 1)]
+        pontos += [(map_width - 1, y) for y in range(1, map_height - 1)]
+        return pontos
 
     @staticmethod
     def carregar_imagens(nome):

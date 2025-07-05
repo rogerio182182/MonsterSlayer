@@ -1,3 +1,5 @@
+from random import choice
+
 from code.Monster import Monster
 from code.Player import Player
 from code.Const import MONSTER_LIST
@@ -13,6 +15,7 @@ class Entityfactory:
             case 'slime' | 'goblin':
 
                dados = MONSTER_LIST[entity_name]
+               x, y = choice(Monster.get_spawn_points_borda())
                key = dados["images_key"]
 
                if key not in Entityfactory.images_loaded:
@@ -20,12 +23,12 @@ class Entityfactory:
 
                return Monster(
                    entity_name,
-                   dados["grid_x"],
-                   dados["grid_y"],
+                   x,
+                   y,
                    50,
                    Entityfactory.images_loaded[key],
                    hp=dados["hp"],
                    speed=dados["speed"]
-            )
+               )
             case _:
                 raise ValueError(f"Entidade '{entity_name}' não encontrada.")

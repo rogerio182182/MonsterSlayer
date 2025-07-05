@@ -5,7 +5,7 @@ import pygame
 
 class Entity(ABC):
 
-    def __init__(self, name: str, grid_x, grid_y, tile_size, images_d: dict):
+    def __init__(self, name: str,grid_x, grid_y, tile_size, images_d: dict):
         self.name = name
         self.grid_pos = (grid_x, grid_y)
         self.tile_size = tile_size
@@ -16,7 +16,13 @@ class Entity(ABC):
 
     def move(self, dx, dy):
         x, y = self.grid_pos
-        self.grid_pos = (x + dx, y + dy)
+        new_x = x + dx
+        new_y = y + dy
+
+
+        if 0 <= new_x < 20 and 0 <= new_y < 12:
+            self.grid_pos = (new_x, new_y)
+            self.rect.topleft = (new_x * self.tile_size, new_y * self.tile_size)
 
         if dx > 0:
             self.direction = "right"

@@ -20,20 +20,30 @@ MENU_OPTION = ('jogar versão - DEMO',
 
 MONSTER_LIST = {
     "slime": {
-        "grid_x": 3,
-        "grid_y": 5,
         'hp': 20,
         "speed": 1,
-        "images_key": "slime"
+        "images_key": "slime",
+
     },
     "goblin": {
-        "grid_x": 6,
-        "grid_y": 7,
         'hp': 50,
         "speed": 2,
-        "images_key": "goblin"
+        "images_key": "goblin",
+
     }
 }
+#s
+
+SPAWN_INTERVAL_INICIAL = 20000
+SPAWN_INTERVAL_LIMIT = 5000
+
+
+SPAWN_POINTS_BORDA = [
+    *[(x, 0) for x in range(20)],
+    *[(x, 11) for x in range(20)],
+    *[(0, y) for y in range(1, 11)],
+    *[(19, y) for y in range(1, 11)],
+]
 
 #W
 W_WIDTH = 1000

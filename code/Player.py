@@ -5,7 +5,8 @@ from code.Entity import Entity  # se estiver em outro arquivo
 class Player(Entity):
 
     def __init__(self, name, grid_x, grid_y, tile_size, images_d):
-        super().__init__(name, grid_x, grid_y, tile_size, images_d)
+        super().__init__(name,grid_x, grid_y, tile_size, images_d)
+        self.grid_pos = (grid_x, grid_y)
         self.hp = 100
         self.speed = 1
 

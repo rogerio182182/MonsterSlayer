@@ -21,12 +21,14 @@ MENU_OPTION = ('jogar versão - DEMO',
 MONSTER_LIST = {
     "slime": {
         'hp': 20,
+        'dano': 20,
         "speed": 1,
         "images_key": "slime",
 
     },
     "goblin": {
         'hp': 50,
+        'dano': 30,
         "speed": 2,
         "images_key": "goblin",
 

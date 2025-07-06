@@ -28,6 +28,7 @@ class Entityfactory:
                    50,
                    Entityfactory.images_loaded[key],
                    hp=dados["hp"],
+                   dano=dados['dano'],
                    speed=dados["speed"]
                )
             case _:

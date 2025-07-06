@@ -4,9 +4,10 @@ import os
 from code.Entity import Entity
 
 class Monster(Entity):
-    def __init__(self, name, grid_x, grid_y, tile_size,  images_d, hp=10, speed=1):
+    def __init__(self, name, grid_x, grid_y, tile_size,  images_d, hp=10, dano=10, speed=1):
         super().__init__(name, grid_x, grid_y, tile_size, images_d)
         self.hp = hp
+        self.dano = dano
         self.player_pos = None
         self.last_move_time = 0
         self.speed = speed

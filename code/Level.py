@@ -3,7 +3,7 @@ import pygame
 import time
 import random
 
-from code.Const import SPAWN_INTERVAL_INICIAL, SPAWN_INTERVAL_LIMIT
+from code.Const import SPAWN_INTERVAL_INICIAL, SPAWN_INTERVAL_LIMIT, W_WIDTH
 from code.EntityFactory import Entityfactory
 from code.EntityMediator import EntityMediator
 from code.Monster import Monster
@@ -123,8 +123,16 @@ class Level:
             # Atualiza a tela
             pygame.display.flip()
 
-            # Verifica entidades sem HP
             EntityMediator.verify_hp(self.entity_list)
+            resultado = EntityMediator.verify_hp(self.entity_list)
+            if resultado == "game_over":
+                self.ranking(
+                    window,
+                    EntityMediator.slimes_mortos,
+                    EntityMediator.goblins_mortos
+                )
+                EntityMediator.resetar_contadores()
+                return
 
     def sorry(self, window):
         surf = pygame.image.load('./asset/Desculpas.png')
@@ -137,3 +145,34 @@ class Level:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     return
+
+    def ranking(self, window, slimes_mortos=0, goblins_mortos=0):
+        surf = pygame.image.load('./asset/Ranking.jpg')
+        surf = pygame.transform.scale(surf, window.get_size())
+        rect = surf.get_rect()
+        window.blit(surf, rect)
+        pygame.display.flip()
+
+        font = pygame.font.SysFont(None, 72)
+        titulo = font.render("RANKING", True, (255, 255, 255))
+        titulo_rect = titulo.get_rect(center=(W_WIDTH // 2, 80))  # Centraliza no topo
+        window.blit(titulo, titulo_rect)
+
+        font = pygame.font.SysFont(None, 36)
+        texto1 = font.render(f"Slimes mortos: {slimes_mortos}", True, (0, 200, 0))
+        texto2 = font.render(f"Goblins mortos: {goblins_mortos}", True, (100, 0, 0))
+
+        texto1_rect = texto1.get_rect(center=(W_WIDTH // 2, 160))
+        texto2_rect = texto2.get_rect(center=(W_WIDTH // 2, 200))
+
+        window.blit(texto1, texto1_rect)
+        window.blit(texto2, texto2_rect)
+
+        pygame.display.flip()
+
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        return

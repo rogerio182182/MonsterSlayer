@@ -23,7 +23,7 @@ class Game:
             elif menu_return == MENU_OPTION[1]:
                 level.sorry(self.window)
             elif menu_return == MENU_OPTION[2]:
-                level.sorry(self.window)
+                level.ranking(self.window)
             elif menu_return == MENU_OPTION[3]:
                 level.sorry(self.window)
             elif menu_return == MENU_OPTION[4]:

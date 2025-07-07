@@ -6,6 +6,13 @@ from code.Player import Player
 
 
 class EntityMediator:
+    slimes_mortos = 0
+    goblins_mortos = 0
+
+    @staticmethod
+    def resetar_contadores():
+        EntityMediator.slimes_mortos = 0
+        EntityMediator.goblins_mortos = 0
 
     @staticmethod
     def skill_collision(skill, entity_list: list[Entity]):
@@ -14,11 +21,8 @@ class EntityMediator:
         for entidade in entity_list:
             if isinstance(entidade, Monster):
                 if skill.rect.colliderect(entidade.rect):
-
                         entidade.hp -= skill.dano
-
                         print(f"{entidade.name} foi atingido por {skill.name} e perdeu {skill.dano} de HP.")
-
                         skill.active = False
                         break
 
@@ -36,7 +40,10 @@ class EntityMediator:
         for ent in entity_list[:]:
             if ent.hp <= 0:
                 if isinstance(ent, Player):
-                    print("GAME OVER")
-                    # Aqui você pode mostrar tela de derrota, pausar o jogo, etc.
-                    continue  # não remove o player da lista ainda
+                    return 'game_over'
+                if ent.name == "slime":
+                    EntityMediator.slimes_mortos += 1
+                elif ent.name == "goblin":
+                    EntityMediator.goblins_mortos += 1
+
                 entity_list.remove(ent)

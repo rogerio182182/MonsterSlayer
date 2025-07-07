@@ -1,6 +1,8 @@
 import pygame
 import os
-from code.Entity import Entity  # se estiver em outro arquivo
+from code.Entity import Entity
+
+
 
 class Player(Entity):
 
@@ -12,6 +14,10 @@ class Player(Entity):
         self.invulneravel = False
         self.tempo_invulneravel = 1000
         self.ultimo_dano = 0
+        self.skills_ativas = []
+        self.create_axe()
+
+
 
     def receber_dano(self, dano):
         tempo_atual = pygame.time.get_ticks()
@@ -47,3 +53,7 @@ class Player(Entity):
             "left": pygame.image.load(os.path.join(caminho, "p_left.png")).convert_alpha(),
             "right": pygame.image.load(os.path.join(caminho, "p_right.png")).convert_alpha(),
         }
+
+    def create_axe(self):
+        from code.EntityFactory import Entityfactory
+        self.axe = Entityfactory.get_entity("axe", origin=self)

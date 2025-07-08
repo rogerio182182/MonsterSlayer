@@ -1,7 +1,4 @@
-from abc import ABC, abstractmethod
-
-import pygame
-
+from abc import ABC
 
 class Entity(ABC):
 

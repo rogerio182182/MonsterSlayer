@@ -1,4 +1,3 @@
-import pygame
 import time
 from code.Entity import Entity
 from code.EntityMediator import EntityMediator
@@ -10,9 +9,9 @@ class Skill(Entity):
 
         self.hp = 1
         self.dano = 10
-        self.direction = direction  # Pode ser (0, 1) ou "down"
+        self.direction = direction
         self.speed = 5
-        self.duration = 5  # segundos
+        self.duration = 5
         self.active = False
         self.start_time = None
 
@@ -65,7 +64,6 @@ class Skill(Entity):
         if not self.active:
             return
 
-        # Movimento da skill
         direction_map = {
             "up": (0, -1),
             "down": (0, 1),

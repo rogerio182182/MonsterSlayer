@@ -4,6 +4,7 @@ c_gold = 255, 215, 0
 c_grey = 200, 200, 200
 c_white = 255, 255, 255
 c_blue = 70, 130, 180
+c_cyan = 0, 255, 255
 
 #g
 grid_width = 20
@@ -40,7 +41,7 @@ SPAWN_INTERVAL_INICIAL = 11000
 SPAWN_INTERVAL_LIMIT = 2000
 
 
-SPAWN_POINTS_BORDA = [
+SPAWN = [
     *[(x, 0) for x in range(20)],
     *[(x, 11) for x in range(20)],
     *[(0, y) for y in range(1, 11)],
@@ -50,3 +51,19 @@ SPAWN_POINTS_BORDA = [
 #W
 W_WIDTH = 1000
 W_HEIGHT = 600
+
+#r
+RANKING_POS = {
+    'Title': (W_WIDTH / 2, 40),
+    'Label': (W_WIDTH / 2, 100),
+    0: (W_WIDTH / 2, 145),
+    1: (W_WIDTH / 2, 190),
+    2: (W_WIDTH / 2, 235),
+    3: (W_WIDTH / 2, 280),
+    4: (W_WIDTH / 2, 325),
+    5: (W_WIDTH / 2, 370),
+    6: (W_WIDTH / 2, 415),
+    7: (W_WIDTH / 2, 460),
+    8: (W_WIDTH / 2, 505),
+    9: (W_WIDTH / 2, 550),
+}

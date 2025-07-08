@@ -1,7 +1,9 @@
+import sys
+
 import pygame
 import pygame.image
 
-from code.Const import W_WIDTH, c_gold, c_white, MENU_OPTION, c_grey, c_orange, c_blue
+from code.Const import W_WIDTH, c_gold, c_white, MENU_OPTION, c_blue
 
 
 class Menu:
@@ -34,8 +36,7 @@ class Menu:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
+                    sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_DOWN:
                         if menu_option < len(MENU_OPTION) - 1:

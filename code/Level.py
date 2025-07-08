@@ -1,9 +1,11 @@
 import pygame
 
-import time
+
 import random
 
-from code.Const import SPAWN_INTERVAL_INICIAL, SPAWN_INTERVAL_LIMIT, W_WIDTH
+from code.Const import SPAWN_INTERVAL_INICIAL, SPAWN_INTERVAL_LIMIT, RANKING_POS, c_gold, c_orange, \
+    c_cyan
+from code.DBProxy import input_name, save_ranking, init_DB, watch_ranking
 from code.EntityFactory import Entityfactory
 from code.EntityMediator import EntityMediator
 from code.Monster import Monster
@@ -19,11 +21,10 @@ class Level:
         self.spawn_timer = 0
         self.spawn_interval = SPAWN_INTERVAL_INICIAL
 
-
     def run(self, ):
         pass
 
-    def map_space(self, grid_width= 20, grid_height= 12):
+    def map_space(self, grid_width=20, grid_height=12):
         grid = [[0 for _ in range(grid_width)] for _ in range(grid_height)]
         return grid
 
@@ -31,11 +32,10 @@ class Level:
         self.som_dano = pygame.mixer.Sound('./asset/monsterDamage.mp3')
         pygame.mixer_music.load('./asset/demoMusic.wav')
         pygame.mixer_music.play(-1)
+        pygame.mixer_music.set_volume(0.3)
 
-        font = pygame.font.SysFont(None, 28)
-        start_time = pygame.time.get_ticks()
 
-        Player.carregar_imagens()
+        Player.load_image()
         player = Entityfactory.get_entity("Player")
         self.entity_list.append(player)
 
@@ -56,9 +56,8 @@ class Level:
             current_time = pygame.time.get_ticks()
 
             EntityMediator.monster_collision(self.entity_list, player, self.som_dano)
-            player.atualizar_invulnerabilidade()
+            player.update_invunarable()
 
-            # Entrada do jogador
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
@@ -71,14 +70,12 @@ class Level:
 
                     player.handle_event(event)
 
-            # Atualiza skills
             for skill in player.skills_ativas[:]:
                 skill.update(delta_time)
                 skill.check_collision(self.entity_list)
                 if not skill.active:
                     player.skills_ativas.remove(skill)
 
-            # Spawning de monstros
             if current_time - self.spawn_timer >= self.spawn_interval:
                 self.spawn_timer = current_time
                 tipo = random.choice(["slime", "goblin"])
@@ -88,50 +85,31 @@ class Level:
                 if self.spawn_interval > SPAWN_INTERVAL_LIMIT:
                     self.spawn_interval = max(SPAWN_INTERVAL_LIMIT, self.spawn_interval - 1000)
 
-            # === DESENHO NA TELA (ORDEM IMPORTANTE) ===
-
-            # Fundo
             window.blit(surf, rect)
 
-            # Player
             window.blit(player.image, player.rect.topleft)
 
-            # Monstros
             for entity in self.entity_list:
                 if isinstance(entity, Monster):
                     entity.set_player_position(player.grid_pos)
                     entity.move_towards_player()
                 window.blit(entity.image, entity.rect.topleft)
 
-            # Skills
             for skill in player.skills_ativas:
                 skill.draw(window)
 
-            # Painel de informações
-            elapsed_time = (pygame.time.get_ticks() - start_time) // 1000
-            info_text = [
-                f"Tempo: {elapsed_time}s",
-                f"Monstros: {len(self.entity_list)}",
-                f"Spawn: {self.spawn_interval // 1000}s"
-            ]
-
-            pygame.draw.rect(window, (0, 0, 0), (0, 0, 200, len(info_text) * 30))
-            for i, linha in enumerate(info_text):
-                texto_surface = font.render(linha, True, (255, 255, 255))
-                window.blit(texto_surface, (10, 10 + i * 30))
-
-            # Atualiza a tela
             pygame.display.flip()
 
-            EntityMediator.verify_hp(self.entity_list)
             resultado = EntityMediator.verify_hp(self.entity_list)
+
             if resultado == "game_over":
-                self.ranking(
-                    window,
-                    EntityMediator.slimes_mortos,
-                    EntityMediator.goblins_mortos
-                )
-                EntityMediator.resetar_contadores()
+                init_DB()
+                nome_jogador = input_name(window)
+                save_ranking(nome_jogador, EntityMediator.slimes_mortos, EntityMediator.goblins_mortos)
+
+                self.ranking(window,)
+
+                EntityMediator.reset_counter()
                 return
 
     def sorry(self, window):
@@ -146,33 +124,36 @@ class Level:
                 if event.type == pygame.KEYDOWN:
                     return
 
-    def ranking(self, window, slimes_mortos=0, goblins_mortos=0):
-        surf = pygame.image.load('./asset/Ranking.jpg')
-        surf = pygame.transform.scale(surf, window.get_size())
-        rect = surf.get_rect()
-        window.blit(surf, rect)
-        pygame.display.flip()
+    def ranking(self, window):
+        pygame.mixer_music.load('./asset/ranking.mp3')
+        pygame.mixer_music.play(-1)
 
-        font = pygame.font.SysFont(None, 72)
-        titulo = font.render("RANKING", True, (255, 255, 255))
-        titulo_rect = titulo.get_rect(center=(W_WIDTH // 2, 80))  # Centraliza no topo
-        window.blit(titulo, titulo_rect)
+        fundo = pygame.image.load('./asset/Ranking.jpg')
+        fundo = pygame.transform.scale(fundo, window.get_size())
+        window.blit(fundo, fundo.get_rect())
 
-        font = pygame.font.SysFont(None, 36)
-        texto1 = font.render(f"Slimes mortos: {slimes_mortos}", True, (0, 200, 0))
-        texto2 = font.render(f"Goblins mortos: {goblins_mortos}", True, (100, 0, 0))
+        fonte_titulo = pygame.font.Font('./asset/FontePetrock2.ttf', 72)
+        fonte_texto = pygame.font.Font('./asset/FontePetrock2.ttf', 28)
 
-        texto1_rect = texto1.get_rect(center=(W_WIDTH // 2, 160))
-        texto2_rect = texto2.get_rect(center=(W_WIDTH // 2, 200))
+        titulo = fonte_titulo.render("RANKING", True, (c_orange))
+        window.blit(titulo, titulo.get_rect(center=RANKING_POS['Title']))
 
-        window.blit(texto1, texto1_rect)
-        window.blit(texto2, texto2_rect)
+        cabecalho = fonte_texto.render("Nome - Slimes - Goblins - Pontos", True, (c_gold))
+        window.blit(cabecalho, cabecalho.get_rect(center=RANKING_POS['Label']))
+
+
+        top_scores = watch_ranking()
+
+        for i, (nome, slimes, goblins, pontos) in enumerate(top_scores):
+            if i in RANKING_POS:
+                texto = f"{nome} | {slimes} | {goblins} | {pontos}"
+                linha = fonte_texto.render(texto, True, (c_cyan))
+                window.blit(linha, linha.get_rect(center=RANKING_POS[i]))
 
         pygame.display.flip()
 
 
         while True:
             for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        return
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    return

@@ -10,7 +10,7 @@ class EntityMediator:
     goblins_mortos = 0
 
     @staticmethod
-    def resetar_contadores():
+    def reset_counter():
         EntityMediator.slimes_mortos = 0
         EntityMediator.goblins_mortos = 0
 
@@ -22,7 +22,6 @@ class EntityMediator:
             if isinstance(entidade, Monster):
                 if skill.rect.colliderect(entidade.rect):
                         entidade.hp -= skill.dano
-                        print(f"{entidade.name} foi atingido por {skill.name} e perdeu {skill.dano} de HP.")
                         skill.active = False
                         break
 
@@ -33,7 +32,7 @@ class EntityMediator:
                 if entidade.grid_pos == player.grid_pos:
                     if not player.invulneravel:
                         som_dano.play()
-                        player.receber_dano(entidade.dano)
+                        player.receiver_damage(entidade.dano)
 
     @staticmethod
     def verify_hp(entity_list: list[Entity]):

@@ -19,7 +19,7 @@ class Player(Entity):
 
 
 
-    def receber_dano(self, dano):
+    def receiver_damage(self, dano):
         tempo_atual = pygame.time.get_ticks()
 
         if not self.invulneravel:
@@ -28,7 +28,7 @@ class Player(Entity):
             self.ultimo_dano = tempo_atual
             print(f"Jogador levou {dano} de dano! HP atual: {self.hp}")
 
-    def atualizar_invulnerabilidade(self):
+    def update_invunarable(self):
         tempo_atual = pygame.time.get_ticks()
         if self.invulneravel and tempo_atual - self.ultimo_dano >= self.tempo_invulneravel:
             self.invulneravel = False
@@ -45,7 +45,7 @@ class Player(Entity):
                 super().move(-1, 0)
 
     @staticmethod
-    def carregar_imagens():
+    def load_image():
         caminho = os.path.join('asset', 'Player')
         Player.images_d = {
             "up": pygame.image.load(os.path.join(caminho,  "p_up.png")).convert_alpha(),
